@@ -8,11 +8,16 @@ router.get('/', (req, res, next) => {
   })
 });
 
-router.post('/', (req, res, next) => {
-  res.status(200).json({
-    message: 'Handling POST requests to /trips'
-  })
-});
+// router.post('/', (req, res, next) => {
+//   const trip = {
+//     tripId: req.body.tripId,
+//     attractionId: req.body.attractionId
+//   };
+//   res.status(200).json({
+//     message: 'Handling POST requests to /trips',
+//     trip: trip
+//   });
+// });
 
 router.get('/:tripId', (req, res, next) => {
   const id = req.params.tripId;
@@ -29,8 +34,13 @@ router.get('/:tripId', (req, res, next) => {
 })
 
 router.post('/', (req, res, next) => {
+  const trip = {
+    tripId: req.body.tripId,
+    attractionId: req.body.attractionId
+  };
   res.status(201).json({
-    message: 'Trip was created!'
+    message: 'Trip was created!',
+    trip: trip
   })
 })
 

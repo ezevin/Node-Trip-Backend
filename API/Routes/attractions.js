@@ -7,11 +7,11 @@ router.get('/', (req, res, next) => {
   })
 });
 
-router.post('/', (req, res, next) => {
-  res.status(200).json({
-    message: 'Handling POST requests to /attractions'
-  })
-});
+// router.post('/', (req, res, next) => {
+//   res.status(200).json({
+//     message: 'Handling POST requests to /attractions'
+//   })
+// });
 
 router.get('/:attractionId', (req, res, next) => {
   const id = req.params.attractionId;
@@ -23,21 +23,26 @@ router.get('/:attractionId', (req, res, next) => {
   }else {
     res.status(200).json({
       message: 'You passed an ID'
-    })
-  }
-})
+    });
+  };
+});
 
 router.post('/', (req, res, next) => {
+  const attraction = {
+    name: req.body.name,
+    location: req.body.location
+  };
   res.status(201).json({
-    message: 'Attraction was created!'
-  })
-})
+    message: 'Attraction was created!',
+    createdAttraction: attraction
+  });
+});
 
 router.patch('/:attractionId', (req, res, next) => {
   res.status(200).json({
     message: 'Updated Attraction!'
-  })
-})
+  });
+});
 
 router.delete('/:attractionId', (req, res, next) => {
   res.status(200).json({
