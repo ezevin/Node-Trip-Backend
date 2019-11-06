@@ -2,9 +2,18 @@ const express  = require('express');
 const app = express();
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
+const mongoose = require('mongoose');
 
 const attractionRoutes = require('./api/routes/attractions');
 const tripRoutes = require('./api/routes/trips');
+
+mongoose.connect(
+  "mongodb+srv://HauntedHouse:" + process.env.MONGO_ATLAS_PW + "@hauntedattractions-cknam.mongodb.net/test?retryWrites=true&w=majority", {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+  },
+ () => console.log("\x1b[35m","  Database is connected...")
+);
 
 app.use(morgan('dev'));
 app.use(bodyParser.urlencoded({extended: false}));
