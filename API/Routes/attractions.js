@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const mongoose = require("mongoose");
 
-const Attraction = require('../Models/attraction');
+const Attraction = require('../models/attraction');
 
 router.get('/', (req, res, next) => {
   res.status(200).json({
@@ -46,17 +46,6 @@ router.get('/:attractionId', (req, res, next) => {
     });
   };
 });
-
-// router.post('/', (req, res, next) => {
-//   const attraction = {
-//     name: req.body.name,
-//     location: req.body.location
-//   };
-//   res.status(201).json({
-//     message: 'Attraction was created!',
-//     createdAttraction: attraction
-//   });
-// });
 
 router.patch('/:attractionId', (req, res, next) => {
   res.status(200).json({
