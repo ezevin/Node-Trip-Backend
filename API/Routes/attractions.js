@@ -6,10 +6,23 @@ const Attraction = require('../models/attraction');
 
 router.get('/', (req, res, next) => {
   Attraction.find()
+    .select('name location _id')
     .exec()
     .then(docs => {
-      console.log(docs);
-      res.status(200).json(docs);
+      const response = {
+        count: docs.length,
+        attractions: docs.map(doc => {
+          return {
+            name: doc.name,
+            location: doc.location,
+            _id: doc._id,
+            request: {
+              type: 'GET'
+            }
+          }
+        });
+      };
+      res.status(200).json(response);
     })
     .catch(err => {
       console.log(err);
