@@ -14,7 +14,7 @@ mongoose.connect(
   },
  () => console.log("\x1b[35m","  Database is connected...")
 );
-
+mongoose.Promise = global.Promise;
 app.use(morgan('dev'));
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());

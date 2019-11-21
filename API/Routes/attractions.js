@@ -17,10 +17,11 @@ router.get('/', (req, res, next) => {
             location: doc.location,
             _id: doc._id,
             request: {
-              type: 'GET'
+              type: 'GET',
+              url: 'http://localhost:3002/attractions/' + doc._id
             }
           }
-        });
+        })
       };
       res.status(200).json(response);
     })
@@ -43,8 +44,16 @@ router.post('/', (req, res, next) => {
     .then(result => {
       console.log(result);
       res.status(201).json({
-        message: 'Handling POST requests to /attractions',
-        createdAttraction: result
+        message: 'Created Attraction Successfully',
+        createdAttraction: {
+          name: result.name,
+          location: result.location,
+          _id: result._id,
+          request: {
+            type: 'GET',
+            url: 'http://localhost:3002/attractions/' + result._id
+          }
+        }
       });
     })
     .catch(err => {
@@ -58,11 +67,18 @@ router.post('/', (req, res, next) => {
 router.get('/:attractionId', (req, res, next) => {
   const id = req.params.attractionId;
   Attraction.findById(id)
+    .select('name location _id')
     .exec()
     .then(doc => {
     console.log("From database", doc);
     if (doc){
-       res.status(200).json(doc)
+       res.status(200).json({
+         attraction: doc,
+         request: {
+           types: 'GET',
+           url: 'http://localhost:3002/attractions/'
+         }
+       })
     } else {
       res.status(404).json({
         message: "No valid entry found for provided ID"
@@ -84,8 +100,10 @@ router.patch('/:attractionId', (req, res, next) => {
   Attraction.update({ _id: id}, { $set: updateOps })
     .exec()
     .then(result => {
-      console.log(result);
-      res.status(200).json(result);
+      res.status(200).json({
+        message: "Attraction updated",
+        url: 'http://localhost:3002/attractions/' + id
+      });
     })
     .catch(err => {
       console.log(err);
@@ -100,8 +118,14 @@ router.delete('/:attractionId', (req, res, next) => {
   Attraction.remove({_id: id})
     .exec()
     .then(result => {
-      console.log(docs);
-      res.status(200).json(docs)
+      res.status(200).json({
+        message: 'Product deleted',
+        request: {
+          type: 'POST',
+          url: 'http://localhost:3002/attractions/',
+          body: { name: 'String', location: 'String'} 
+        }
+      })
     })
     .catch(err => {
       console.log(err);
