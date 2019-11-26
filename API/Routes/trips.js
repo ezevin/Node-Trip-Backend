@@ -21,9 +21,9 @@ router.get('/', (req, res, next) => {
               type: 'GET',
               url: 'http://localhost:3002/trips/' + doc._id
             }
-          }
+          };
         })
-      })
+      });
     })
     .catch(err => {
       res.status(500).json({
@@ -71,17 +71,27 @@ router.post('/', (req, res, next) => {
 });
 
 router.get('/:tripId', (req, res, next) => {
-  const id = req.params.tripId;
-  if(id === 'special'){
-    res.status(200).json({
-      message: "You discovered the special ID",
-      id: id
+  Trip.findById(req.params.tripId)
+    .exec()
+    .then(trip => {
+      if(!trip){
+        return res.status(404).json({
+          message: 'Trip not found'
+        })
+      }
+      res.status(200).json({
+        trip: trip,
+        request: {
+          type: 'GET',
+          url: 'http://localhost:3002/trips/'
+        }
+      });
     })
-  }else {
-    res.status(200).json({
-      message: 'You passed an ID'
-    })
-  }
+    .catch(err => {
+      res.status(500).json({
+        error: err
+      })
+    });
 });
 
 router.patch('/:tripId', (req, res, next) => {
@@ -91,9 +101,26 @@ router.patch('/:tripId', (req, res, next) => {
 })
 
 router.delete('/:tripId', (req, res, next) => {
-  res.status(200).json({
-    message: 'Deleted Trip!'
-  })
+  Trip.remove({ _id: req.params.tripId })
+    .exec()
+    .then(result => {
+      res.status(200).json({
+        message: 'Trip deleted',
+        request: {
+          type: 'POST',
+          url: 'http://localhost:3002/trips/',
+          body: {
+            productId: 'ID',
+            quantity: 'Number'
+          }
+        }
+      })
+    })
+    .catch(err => {
+      res.status(500).json({
+        error: err
+      })
+    });
 })
 
 
