@@ -8,6 +8,7 @@ const Attraction = require('../models/attraction');
 router.get('/', (req, res, next) => {
   Trip.find()
     .select('attraction quantity _id')
+    .populate('attraction', 'name location')
     .exec()
     .then(docs => {
       res.status(200).json({
@@ -72,6 +73,7 @@ router.post('/', (req, res, next) => {
 
 router.get('/:tripId', (req, res, next) => {
   Trip.findById(req.params.tripId)
+    .populate('attraction')
     .exec()
     .then(trip => {
       if(!trip){
