@@ -6,6 +6,7 @@ const mongoose = require('mongoose');
 
 const attractionRoutes = require('./api/routes/attractions');
 const tripRoutes = require('./api/routes/trips');
+const userRoutes = require('./api/routes/user');
 
 mongoose.connect(
   "mongodb+srv://HauntedHouse:" + process.env.MONGO_ATLAS_PW + "@hauntedattractions-cknam.mongodb.net/test?retryWrites=true&w=majority", {
@@ -36,6 +37,7 @@ app.use((req, res, next) => {
 // Route  handling Requests //
 app.use('/attractions', attractionRoutes);
 app.use('/trips', tripRoutes);
+app.use('/user', userRoutes);
 
 app.use((req, res, next) => {
   const error = new Error("Not found");
