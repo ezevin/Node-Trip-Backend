@@ -1,5 +1,6 @@
 {
     "env": {
-        "MONGO_ATLAS_PW": "hauntedhouse"
+        "MONGO_ATLAS_PW": "hauntedhouse",
+        "JWT_KEY": "secret"
     }
 }
