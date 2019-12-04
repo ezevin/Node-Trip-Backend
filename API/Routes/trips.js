@@ -1,11 +1,12 @@
 const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
+const checkAuth = require('../middleware/check-auth');
 
 const Trip = require('../models/trip');
 const Attraction = require('../models/attraction');
 //Handle incoming GET requests to /trips //
-router.get('/', (req, res, next) => {
+router.get('/', checkAuth, (req, res, next) => {
   Trip.find()
     .select('attraction quantity _id')
     .populate('attraction', 'name location')
@@ -33,7 +34,7 @@ router.get('/', (req, res, next) => {
     });
 });
 
-router.post('/', (req, res, next) => {
+router.post('/', checkAuth, (req, res, next) => {
   Attraction.findById(req.body.attractionId)
     .then(attraction => {
       if(!attraction){
@@ -71,7 +72,7 @@ router.post('/', (req, res, next) => {
       });
 });
 
-router.get('/:tripId', (req, res, next) => {
+router.get('/:tripId', checkAuth, (req, res, next) => {
   Trip.findById(req.params.tripId)
     .populate('attraction')
     .exec()
@@ -96,13 +97,13 @@ router.get('/:tripId', (req, res, next) => {
     });
 });
 
-router.patch('/:tripId', (req, res, next) => {
+router.patch('/:tripId', checkAuth, (req, res, next) => {
   res.status(200).json({
     message: 'Updated Trip!'
   })
 })
 
-router.delete('/:tripId', (req, res, next) => {
+router.delete('/:tripId', checkAuth, (req, res, next) => {
   Trip.remove({ _id: req.params.tripId })
     .exec()
     .then(result => {

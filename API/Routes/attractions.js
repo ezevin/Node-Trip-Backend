@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const mongoose = require("mongoose");
 const multer = require("multer");
+const checkAuth = require('../middleware/check-auth');
 
 const  storage = multer.diskStorage({
   destination: function(req, file, cb) {
@@ -61,13 +62,13 @@ router.get('/', (req, res, next) => {
     })
 });
 
-router.post('/', upload.single('attractionImage'), (req, res, next) => {
+router.post('/', checkAuth, upload.single('attractionImage'), (req, res, next) => {
   console.log(req.file);
   const attraction = new Attraction({
     _id: new mongoose.Types.ObjectId(),
     name: req.body.name,
     location: req.body.location,
-    attractionImage: req.file.path
+    // attractionImage: req.file.path
   });
   attraction
     .save()
@@ -121,7 +122,7 @@ router.get('/:attractionId', (req, res, next) => {
     });
 });
 
-router.patch('/:attractionId', (req, res, next) => {
+router.patch('/:attractionId', checkAuth, (req, res, next) => {
   const id = req.params.attractionId;
   const updateOps = {};
   for (const ops of req.body) {
@@ -143,7 +144,7 @@ router.patch('/:attractionId', (req, res, next) => {
     });
 });
 
-router.delete('/:attractionId', (req, res, next) => {
+router.delete('/:attractionId', checkAuth, (req, res, next) => {
   const id = req.params.attractionId;
   Attraction.remove({_id: id})
     .exec()
