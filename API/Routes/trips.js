@@ -1,10 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const mongoose = require('mongoose');
 const checkAuth = require('../middleware/check-auth');
-
-const Trip = require('../models/trip');
-const Attraction = require('../models/attraction');
 
 const TripsController = require('../controllers/trips');
 
